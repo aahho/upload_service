@@ -1,4 +1,5 @@
 from aws_s3.urls import aws_s3
+from google_cloud.urls import cloud
 
 ## 
 # Register all url blueprints
@@ -7,3 +8,4 @@ from aws_s3.urls import aws_s3
 def register_urls(app):
 	## Blueprint for aws_s3
 	app.register_blueprint(aws_s3)
+	app.register_blueprint(cloud)
