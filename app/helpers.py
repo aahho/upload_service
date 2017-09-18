@@ -106,8 +106,14 @@ def get_file_path(file):
 ##
 # To fetch postgresql database url
 ##
-def generate_database_url():
+def generate_pgsql_connect_url():
     return getenv('DB_PSQL')+'://'+getenv('DB_USERNAME')+':'+getenv('DB_PASSWORD')+'@localhost/'+getenv('DB_NAME')
+
+##
+# To fetch mongo database url
+##
+def generate_mongo_connect_url():
+    return 'mongodb://'+getenv('HOST')+':'+str(getenv('MONGO_PORT'))+'/'+getenv('MONGO_DB')
 
 ##
 # Get File Size in MB

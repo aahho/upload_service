@@ -6,7 +6,7 @@ def respond_with_item(statusCode, data, transformer):
 
     response['notification'] = {}
     response['notification']['hint'] = "Response Sent"
-    response['notification']['message'] = "Success"
+    response['notification']['message'] = "Response sent successfully"
     response['notification']['responseCode'] = statusCode
     response['notification']['type'] = "Success"
 
@@ -20,7 +20,7 @@ def respond_with_success(statusCode, message, hint="Response Sent"):
     
     response['notification'] = {}
     response['notification']['hint'] = hint
-    response['notification']['message'] = "Success"
+    response['notification']['message'] = "Response sent successfully"
     response['notification']['responseCode'] = statusCode
     response['notification']['type'] = "Success"
     
@@ -34,7 +34,7 @@ def respond_with_list(statusCode, data, hint="Response Sent"):
     
     response['notification'] = {}
     response['notification']['hint'] = hint
-    response['notification']['message'] = "Success"
+    response['notification']['message'] = "Response sent successfully"
     response['notification']['responseCode'] = statusCode
     response['notification']['type'] = "Success"
     
@@ -48,7 +48,7 @@ def respond_with_transformed_list(statusCode, data, transformer):
     
     response['notification'] = {}
     response['notification']['hint'] = "Response Sent"
-    response['notification']['message'] = "Success"
+    response['notification']['message'] = "Response sent successfully"
     response['notification']['responseCode'] = statusCode
     response['notification']['type'] = "Success"
     

@@ -4,10 +4,11 @@ class Config():
 	DEBUG = False
 	TESTING = False
 	CSRF_ENABLED = True
+	HOST = os.environ['HOST']
 	SECRET_KEY = os.environ['SECRET_KEY']
 	SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
 	SQLALCHEMY_TRACK_MODIFICATIONS = False
-	HOST = os.environ['HOST']
+	MONGO_URI = os.environ['MONGO_URI']
 
 class Local(Config):
 	DEBUG = True

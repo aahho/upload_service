@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, current_app
 from app.urls import register_urls
 from app.exceptions import ApiBaseException
 from app.settings import os
@@ -6,11 +6,12 @@ from app.settings import os
 ## Registering Application
 app = Flask(__name__)
 
-##Registering Urls
-register_urls(app)
 
 ## Loading Application configurations from settings
 app.config.from_object(os.environ['APP_SETTINGS'])
+
+## Registering Urls
+register_urls(app)
 
 ## For Handling Custom Api Exception
 @app.errorhandler(ApiBaseException)

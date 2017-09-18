@@ -2,4 +2,5 @@
 *.pyc
 migrations
 env.py
+/static/tmp
 

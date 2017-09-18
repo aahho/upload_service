@@ -16,14 +16,18 @@ class ApiBaseException(Exception):
 			self.error_code = error_code
 
 	def handle(self):
-		response = dict(self.payload or ())
-		response['message'] = self.message
-		response['status'] = 'failed'
-		response['errorCode'] = self.error_code
+		response = {}
+		response['data'] = self.message
+
+		response['notification'] = {}
+		response['notification'] = dict(self.payload or ())
+		response['notification']['message'] = 'Failed to respond'
+		response['notification']['type'] = 'failure'
+		response['notification']['errorCode'] = self.error_code
+
 		return response
 
 class MissingRequiredParameter(ApiBaseException):
-	message = 'Request could not be understood. Bad request'
 	status_code = 400
 	error_code = 'AH_400'
 	payload = (['hint','Please fill mandatory fields.'],)
@@ -44,3 +48,13 @@ class UnauthorizedRequest(ApiBaseException):
 	message = "Unauthorized Request"
 	error_code = 'AH_401'
 	payload = (['hint','It lacks valid authentication credentials for the target resource.'],)
+
+class InvalidRequest(ApiBaseException):
+	status_code = 400
+	error_code = 'AH_400'
+	payload = (['hint','Request cannot be processed.'],)
+
+	def __init__(self, params={}, payload=None):
+		if payload is not None:
+			self.payload = payload
+		self.message = "Invalid request made for: %s" % ', '.join(params)
