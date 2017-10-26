@@ -48,7 +48,10 @@ def get_path(temp_name):
 	return os.environ['UPLOAD_FOLDER']+'/'+temp_name
 
 def temp_link(temp_name):
-	return "http://"+helpers.getenv('HOST')+":5000/service/s3/static/"+temp_name
+	host = helpers.getenv('HOST')
+	if host == '127.0.0.1':
+		host = '127.0.0.1:5000'
+	return "http://"+host+"/service/s3/static/"+temp_name
 
 # def create_fresh_pool_format(data):
 # 	return {
