@@ -49,25 +49,25 @@ def get_path(file):
 def temp_link(file_details):
 	return "http://127.0.0.1:5000/service/s3/static/"+file_details['original_name']
 
-def create_fresh_pool_format(data):
-	return {
-		'promise_id' : data['promiseId'],
-		'expected_packet_count' : data['expectedSlice'],
-		'data' : [
-			{
-				'start' : data['start'],
-				'end' : data['end'],
-				'current_loop_count' : data['currentLoopId']
-			}
-		]
-	}
+# def create_fresh_pool_format(data):
+# 	return {
+# 		'promise_id' : data['promiseId'],
+# 		'expected_packet_count' : data['expectedSlice'],
+# 		'data' : [
+# 			{
+# 				'start' : data['start'],
+# 				'end' : data['end'],
+# 				'current_loop_count' : data['currentLoopId']
+# 			}
+# 		]
+# 	}
 
-def create_regular_pool_format(data):
-	return {
-		'start' : data['start'],
-		'end' : data['end'],
-		'current_loop_count' : data['currentLoopId'],
-	}
+# def create_regular_pool_format(data):
+# 	return {
+# 		'start' : data['start'],
+# 		'end' : data['end'],
+# 		'current_loop_count' : data['currentLoopId'],
+# 	}
 
 def load_file(file):
 	with open(file, 'r') as file:

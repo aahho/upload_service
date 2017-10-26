@@ -26,6 +26,9 @@ def view_file(file_name):
 	
 	return response
 
+def download_file(file_name):
+	pass
+
 ## For uploading new file on to aws
 @aws_s3.route('/upload', methods=['POST'])
 def upload():
