@@ -1,5 +1,7 @@
 .pyc
 *.pyc
+*.json
+*.DS_Store
 migrations
 env.py
 /app/static/tmp
