@@ -1,4 +1,5 @@
 from app import helpers
+from app.synchronizer import helpers as sync_helper
 import logging
 import math
 import mimetypes
@@ -25,7 +26,7 @@ class Apis(object):
 		self.conn = S3Connection(self.access_key, self.access_secret)
 		self.bucket_name = helpers.getenv('BUCKET_NAME')
 		self.bucket_directory = 'production/'+helpers.get_current_month_and_year() if helpers.getenv('APP_ENV') == 'production' else 'testing/'+helpers.get_current_month_and_year()
-		self.parallel_processes = 4
+		self.parallel_processes = 10
 
 	def upload_large(self, file_details, guess_mimetype=True, force_download=False, policy="public-read"):
 		source_path = file_details['path']
@@ -54,12 +55,13 @@ class Apis(object):
 		pool.join()
 
 		if len(multipart.get_all_parts()) == chunk_amount:
-			print "UPLOADED SUCCESSFULLY"
 			multipart.complete_upload()
 			key = bucket.get_key(keyname)
 			key.set_acl(policy)
 			key.content_type = basic_headers['Content-Type']
 			key.set_contents_from_filename(source_path, policy=policy, headers=basic_headers)
+			sync_helper.sync_server(file_details)
+			print "FILE UPLOADED SUCESSFULLY"
 		else:
 			multipart.cancel_upload()
 

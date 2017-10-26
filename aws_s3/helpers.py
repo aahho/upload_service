@@ -2,18 +2,19 @@ from werkzeug.utils import secure_filename
 import os, datetime, re, magic, math
 from app import helpers
 
-def fetch_file_details(file):
+def fetch_file_details(file, temp_name):
 	data = {
+		'id' : str(helpers.generate_uuid()),
 		'name' : get_name(file),
 		'original_name' : get_original_name(file),
 		'title' : get_title(file),
 		'extension': get_extension(file),
 		'content_type' : get_mime_type(file),
-		'path' : get_path(file),
+		'path' : get_path(temp_name),
 		'size' : get_size(file)/(1000*1024)
 	}
-	data['temp_link'] = temp_link(data)
-	data['self_link'] = self_link(data)
+	data['temp_link'] = self_link(data)
+	data['self_link'] = temp_link(temp_name)
 	return data
 
 def get_name(file):
@@ -43,11 +44,11 @@ def get_size(file):
 def get_current_month_and_year():
 	return datetime.date.today().strftime("%B")+datetime.date.today().strftime("%Y")
 
-def get_path(file):
-	return os.environ['UPLOAD_FOLDER']+'/'+secure_filename(file.filename)
+def get_path(temp_name):
+	return os.environ['UPLOAD_FOLDER']+'/'+temp_name
 
-def temp_link(file_details):
-	return "http://127.0.0.1:5000/service/s3/static/"+file_details['original_name']
+def temp_link(temp_name):
+	return "http://"+helpers.getenv('HOST')+":5000/service/s3/static/"+temp_name
 
 # def create_fresh_pool_format(data):
 # 	return {

@@ -1,7 +1,6 @@
 from flask import Blueprint, request, render_template, send_file, Response
 from app.settings import os
 import magic
-from app import response
 from aws_s3 import controller, helpers
 import json
 
@@ -17,6 +16,9 @@ def get():
 @aws_s3.route('/static/<file_name>')
 def view_file(file_name):
 	file_path = os.path.join(os.environ['UPLOAD_FOLDER'], file_name).strip(' \t\r\n\0')
+	if not os.path.exists(file_path):
+		from app import response
+		return response.respond_with_error(404, 'File Does Not Exists', 'Content Removed')
 	mimetype = helpers.get_mime_from_file(file_path)
 	
 	file = helpers.load_file(file_path)

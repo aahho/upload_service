@@ -28,6 +28,20 @@ def respond_with_success(statusCode, message, hint="Response Sent"):
     response.status_code = statusCode
     return response
 
+def respond_with_error(statusCode, message, hint="Failed To Respond"):
+    response = {}
+    response['data'] = str(message)
+    
+    response['notification'] = {}
+    response['notification']['hint'] = hint
+    response['notification']['message'] = "Failed To Respond"
+    response['notification']['responseCode'] = statusCode
+    response['notification']['type'] = "Failed"
+    
+    response = flask.jsonify(response)
+    response.status_code = statusCode
+    return response
+
 def respond_with_list(statusCode, data, hint="Response Sent"):
     response = {}
     response['data'] = data
