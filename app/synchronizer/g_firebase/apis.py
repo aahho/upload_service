@@ -26,7 +26,7 @@ class FirebaseApi():
 		uploads = self.get_uploads()
 		for upload in uploads.each():
 			if data['id'] == upload.val()['id']:
-				update = self.db.child("/chat/uploads").child(data['id']).update({"self_link": data['temp_link'], "temp_link": data['self_link']})
+				update = self.db.child("/chat/uploads").child(data['id']).update({"selfLink": data['temp_link'], "tempLink": data['self_link']})
 				if update:
 					return True
 		return False

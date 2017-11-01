@@ -59,7 +59,7 @@ def respond_with_list(statusCode, data, hint="Response Sent"):
 def respond_with_transformed_list(statusCode, data, transformer):
     response = {}
     response['data'] = fetch_data_from_transformer(transformer, data)
-    
+    transformed = response['data']
     response['notification'] = {}
     response['notification']['hint'] = "Response Sent"
     response['notification']['message'] = "Response sent successfully"
@@ -68,7 +68,7 @@ def respond_with_transformed_list(statusCode, data, transformer):
     
     response = flask.jsonify(response)
     response.status_code = statusCode
-    return response
+    return response, transformed
 
 def respond_with_paginated_collection(request, statusCode, data, transformer):
     total_length = len(data)
