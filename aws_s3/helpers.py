@@ -11,12 +11,13 @@ def fetch_file_details(file, temp_name):
 		'extension': get_extension(file),
 		'content_type' : get_mime_type(file),
 		'path' : get_path(temp_name),
-		'size' : get_size(get_path(temp_name)),
-		'web_views' : generate_web_view_links(get_extension(file))
+		'size' : get_size(get_path(temp_name))
 	}
 	data['temp_link'] = self_link(data['name'])
 	data['self_link'] = temp_link(temp_name)
-	data['web_view_links'] = dict((label, self_link(data['web_views'][label]['name'])) for label in data['web_views'])
+	if data['extension'] in resizable_types():
+		data['web_views'] = generate_web_view_links(get_extension(file))
+		data['web_view_links'] = dict((label, self_link(data['web_views'][label]['name'])) for label in data['web_views'])
 	return data
 
 def get_name(file):

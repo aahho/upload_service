@@ -6,8 +6,9 @@ def transform(data):
 		'title' : data['original_name'],
 		'selfLink' : data['self_link'],
 		'tempLink' : data['temp_link'],
-		'webViewLinks' : data['web_view_links'],
 		'size' : data['size'],
 		'mimeType' : data['content_type']
 	}
+	if 'web_view_links' in data:
+		result['webViewLinks'] = data['web_view_links'],
 	return result
