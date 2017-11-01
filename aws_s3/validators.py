@@ -16,6 +16,10 @@ def validate_upload(request):
 			raise InvalidRequest(params={'upload'}, payload=(['hint','Requested file format not supported.'],))
 	return True
 
+def validate_download(request):
+	if request.args.get('url') is None or request.args.get('url') == '':
+		raise MissingRequiredParameter(params={'url'}, payload=(['hint','Please send url.'],))
+
 ##
 # List of Blocked Extensions by server
 ##

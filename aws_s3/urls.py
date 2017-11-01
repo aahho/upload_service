@@ -28,8 +28,10 @@ def view_file(file_name):
 	
 	return response
 
-def download_file(file_name):
-	pass
+@aws_s3.route('/download', methods=['GET'])
+def download_file():
+	result = controller.process_download(request)
+	return result
 
 ## For uploading new file on to aws
 @aws_s3.route('/upload', methods=['POST'])

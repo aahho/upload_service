@@ -11,10 +11,12 @@ def fetch_file_details(file, temp_name):
 		'extension': get_extension(file),
 		'content_type' : get_mime_type(file),
 		'path' : get_path(temp_name),
-		'size' : get_size(file)/(1000*1024)
+		'size' : get_size(get_path(temp_name)),
+		'web_views' : generate_web_view_links(get_extension(file))
 	}
-	data['temp_link'] = self_link(data)
+	data['temp_link'] = self_link(data['name'])
 	data['self_link'] = temp_link(temp_name)
+	data['web_view_links'] = dict((label, self_link(data['web_views'][label]['name'])) for label in data['web_views'])
 	return data
 
 def get_name(file):
@@ -31,6 +33,41 @@ def get_title(file):
 def get_extension(file):
 	return os.path.splitext(secure_filename(file.filename))[1]
 
+def resizable_types():
+	return ['.png', '.jpg', '.jpeg']
+
+def resizable_sizes():
+	return [
+		{
+		'label' : 'mobile',
+		'width' : 40,
+		'height' : 40 
+		},
+		{
+		'label' : 'thumbnail',
+		'width' : 100,
+		'height' : 100 
+		},
+		{
+		'label' : 'medium',
+		'width' : 640,
+		'height' : 480 
+		},
+		{
+		'label' : 'large',
+		'width' : 1024,
+		'height' : 768 
+		}
+	]
+
+def generate_web_view_links(extension):
+	sizes = resizable_sizes()
+	links = {}
+	for size in sizes:
+		name = str(helpers.generate_uuid())+extension
+		links[size['label']] = {'name' : name, 'width' : size['width'], 'height' : size['height']}
+	return links
+
 def get_mime_type(file):
 	return file.content_type
 
@@ -38,8 +75,8 @@ def get_mime_from_file(file_path):
 	mime = magic.Magic(mime=True)
 	return mime.from_file(file_path)
 
-def get_size(file):
-	return len(file.read())
+def get_size(path):
+	return os.stat(path).st_size
 
 def get_current_month_and_year():
 	return datetime.date.today().strftime("%B")+datetime.date.today().strftime("%Y")
@@ -80,10 +117,27 @@ def load_file(file):
 def get_bucket_directory():
 	return 'production/'+get_current_month_and_year() if helpers.getenv('APP_ENV') == 'production' else 'testing/'+get_current_month_and_year()
 
-def self_link(file_details):
+def self_link(filename):
 	self_link = "https://s3.amazonaws.com/{0}/{1}/{2}".format(
 		helpers.getenv('BUCKET_NAME'),
 		get_bucket_directory(),
-		file_details['name']
+		filename
 	)
 	return self_link
+
+def resize_image(file_details):
+	from PIL import Image
+	from resizeimage import resizeimage
+
+	try:
+		file = open(file_details['path'], 'r')
+		for label in file_details['web_views']:
+			name = file_details['web_views'][label]['name']
+			pil_image = Image.open(file, 'r')
+			pil_image.thumbnail([file_details['web_views'][label]['width'], file_details['web_views'][label]['height']], Image.ANTIALIAS)
+			pil_image.save(os.path.join(os.environ['UPLOAD_FOLDER'], name), pil_image.format)
+			file_details['web_view_links'][label] = {'path' : get_path(name), 'name' : name}
+		return file_details
+	except Exception, e:
+		print "--------- Came To Exception ________"
+		return []

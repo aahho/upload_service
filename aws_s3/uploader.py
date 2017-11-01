@@ -6,7 +6,7 @@ import os
 import threading
 
 def upload(request):
-	upload = Apis()
+	aws = Apis()
 	files = request.files.getlist('files[]')
 	if not os.path.isdir(os.environ['UPLOAD_FOLDER']):
 		os.mkdir(os.environ['UPLOAD_FOLDER'])
@@ -15,6 +15,9 @@ def upload(request):
 		name = str(common_helper.generate_uuid())+os.path.splitext(secure_filename(file.filename))[1]
 		file.save(os.path.join(os.environ['UPLOAD_FOLDER'], name))
 		file_details = helpers.fetch_file_details(file, name)
-		threading.Thread(target = upload.upload_large, args=(file_details,)).start()
+		threading.Thread(target = aws.upload_large, args=(file_details,)).start()
 		upload_response.append(file_details)
 	return upload_response
+
+def download(request):
+	pass
