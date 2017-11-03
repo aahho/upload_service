@@ -10,7 +10,7 @@ def validate_upload(request):
 	if 'app' not in request.args:
 		raise MissingRequiredParameter(params={'app'}, payload=(['hint','Please provide app name.'],))
 	if not request.args['app'] in helpers.apps_allowed():
-		raise MissingRequiredParameter(params={'app'}, payload=(['hint','Provided app cannot be served'],))
+		raise InvalidRequest(params={'app'}, payload=(['hint','Provided app cannot be served'],))
 	if not len(request.files):
 		raise MissingRequiredParameter(params={'files'}, payload=(['hint','Please attach files.'],))
 	files = request.files.getlist('files[]')
