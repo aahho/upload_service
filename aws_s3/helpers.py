@@ -140,5 +140,9 @@ def resize_image(file_details):
 			file_details['web_view_links'][label] = {'path' : get_path(name), 'name' : name}
 		return file_details
 	except Exception, e:
-		print "--------- Came To Exception ________"
+		print "--------- Came To Exception Image Resizer ________", file_details['path']
 		return []
+
+def apps_allowed():
+	return ['noodlestock', 'fbase']
+	

@@ -1,12 +1,16 @@
 from app.exceptions import MissingRequiredParameter, InvalidRequest
 from werkzeug.utils import secure_filename
-import json
+import json, helpers
 
 ##
 # Validate New Upload Request and file formats
 # @param request Object
 ##
 def validate_upload(request):
+	if 'app' not in request.args:
+		raise MissingRequiredParameter(params={'app'}, payload=(['hint','Please provide app name.'],))
+	if not request.args['app'] in helpers.apps_allowed():
+		raise MissingRequiredParameter(params={'app'}, payload=(['hint','Provided app cannot be served'],))
 	if not len(request.files):
 		raise MissingRequiredParameter(params={'files'}, payload=(['hint','Please attach files.'],))
 	files = request.files.getlist('files[]')
