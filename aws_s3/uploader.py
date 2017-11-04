@@ -16,8 +16,7 @@ def upload(request):
 		file.save(os.path.join(os.environ['UPLOAD_FOLDER'], name))
 		file_details = helpers.fetch_file_details(file, name)
 		file_details['app'] = request.args['app']
-		if request.args['app'] != 'noodlestock':
-			threading.Thread(target = aws.upload_large, args=(file_details,)).start()
+		threading.Thread(target = aws.upload_large, args=(file_details,)).start()
 		upload_response.append(file_details)
 	return upload_response
 
